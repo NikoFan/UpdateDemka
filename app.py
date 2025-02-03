@@ -14,6 +14,8 @@ from DATABASE import Database
 
 from PartnerStatic import Partner  # Добавление статического класса
 
+from SendMessageBox import *
+
 
 class MainApplicationClass(QWidget):
     def __init__(self):  # Конструктор класса MainApplication
@@ -68,6 +70,19 @@ class MainApplicationClass(QWidget):
         self.frames_container.addWidget(goal_frame)
         # Установка целевого фрейма Текущим, чтобы он демонстрировался на экране
         self.frames_container.setCurrentWidget(goal_frame)
+
+    def closeEvent(self, event):
+        """
+        Функция контролирует выход из приложения, и задает вопрос пользователю
+        :param event: Действие - выход
+        :return: Ничего не возвращается
+        """
+        # Если пользователь ответил Да (UID ДА - 16000)
+        if send_W_message("Вы точно хотите выйти?") < 20000:
+            event.accept()
+        # Если пользователь ответил Нет (UID НЕТ - 60000)
+        else:
+            event.ignore()
 
 
 # #67BA80 - Акцентирование внимания
