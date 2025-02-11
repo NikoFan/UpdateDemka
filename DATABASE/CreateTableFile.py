@@ -3,10 +3,22 @@ import psycopg
 
 from CONFIG import *
 
+"""
+Обновил способ создания таблиц
+Раньше было написано 5 разных функция, в которых отличался только скрипт создания
+=> лишний раз писать строки:
+cursor = connection.cursor()
+    cursor.execute(query)
+    connection.commit()
+    cursor.close()
+    
+Теперь это лежит в 1 функции, которая принимает разные запросы и выполняет их.
+При работе соблюдайте порядок заполнения
 
-def create_partners_import(connection):
-    # Создание запроса к бд
-    query = '''
+*я еще не тестировал этот код, он не должен выдавать ошибку, т.к. сделан по аналогии со старым
+но если будет ошибка - пишите!
+"""
+query_partners_import = '''
     create table partners_import (
     partner_type nchar(3) not null,
     partner_name nchar(100) PRIMARY KEY not null,
@@ -18,18 +30,8 @@ def create_partners_import(connection):
     partner_rate nchar(2) not null
     )
     '''
-    # Создание курсора для запуска запроса
-    cursor = connection.cursor()
-    # Исполнение запроса
-    cursor.execute(query)
-    # Сохранение изменений
-    connection.commit()
-    # Закрытие курсора
-    cursor.close()
 
-
-def create_partner_products_import(connection):
-    query = '''
+query_partner_products_import = '''
     create table partner_products_import (
     product_name_fk nchar(300) not null,
     FOREIGN KEY (product_name_fk) REFERENCES products_import(product_name) ON UPDATE CASCADE,
@@ -41,27 +43,15 @@ def create_partner_products_import(connection):
     sale_date date not null
     )
     '''
-    cursor = connection.cursor()
-    cursor.execute(query)
-    connection.commit()
-    cursor.close()
 
-
-def create_material_type_import(connection):
-    query = '''
+query_material_type_import = '''
     create table material_type_import (
     material_type nchar(50) PRIMARY KEY not null,
     material_broke_percent nchar(5) not null
     )
     '''
-    cursor = connection.cursor()
-    cursor.execute(query)
-    connection.commit()
-    cursor.close()
 
-
-def create_products_import(connection):
-    query = '''
+query_products_import = '''
     create table products_import (
     product_type_fk nchar(50) not null,
     FOREIGN KEY (product_type_fk) REFERENCES product_type_import(product_type) ON UPDATE CASCADE,
@@ -70,38 +60,31 @@ def create_products_import(connection):
     product_min_cost real not null
     )
     '''
-    cursor = connection.cursor()
-    cursor.execute(query)
-    connection.commit()
-    cursor.close()
 
-
-def create_product_type_import(connection):
-    query = '''
+query_product_type_import = '''
     create table product_type_import (
     product_type nchar(50) PRIMARY KEY not null,
     product_coefficient_type real not null
     )
     '''
+
+
+def create_table(connection, query):
     cursor = connection.cursor()
     cursor.execute(query)
     connection.commit()
     cursor.close()
 
 
-def main():
-    # Создание строки подключения к серверу
-    connection_uri = psycopg.connect(
-        user=USER,
-        host=HOST,
-        password=PASS,
-        dbname=DBNAME
-    )
-    # Вызов скриптов на создание таблиц (Важен порядок создания)
-    create_partners_import(connection_uri)
-    create_product_type_import(connection_uri)
-    create_material_type_import(connection_uri)
-    create_products_import(connection_uri)
-    create_partner_products_import(connection_uri)
-
-main()
+# Создание строки подключения к серверу
+connection_uri = psycopg.connect(
+    user=USER,
+    host=HOST,
+    password=PASS,
+    dbname=DBNAME
+)
+create_table(connection_uri, query_partners_import)
+create_table(connection_uri, query_product_type_import)
+create_table(connection_uri, query_material_type_import)
+create_table(connection_uri, query_products_import)
+create_table(connection_uri, query_partner_products_import)
