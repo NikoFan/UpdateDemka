@@ -16,7 +16,7 @@ from PySide6.QtGui import (
 from DATABASE import Database
 
 # Добавление файлов с другими фреймами
-from FRAMES import CreatePartnerFrame, PartnerInfoFrame
+from FRAMES import CreatePartnerFrame, PartnerInfoFrame, UpdatePartnerFrame
 
 
 class PartnerCardsClass(QFrame):
@@ -166,13 +166,21 @@ class PartnerCardsClass(QFrame):
             # Установка действия при нажатии
             partner_card_button.clicked.connect(
                 # Вызов функции БЕЗ СКОБОК
-                self.call_switch_frames
+                self.open_partner_info_frame
             )
+
+            update_btn = QPushButton("Редактировать")
+            update_btn.setAccessibleName(f"{partner_information['name']}")
+            # Добавление действия при нажатии на кнопку
+            update_btn.clicked.connect(
+                self.open_update_info_frame
+            )  # Если действие без lambda - Скобки не ставятся
             # Добавление текстовых полей в разметку КАРТОЧКИ
             card_layout.addWidget(dir_label)
             card_layout.addWidget(phone_label)
             card_layout.addWidget(rate_label)
             card_layout.addWidget(partner_card_button)
+            card_layout.addWidget(update_btn)
 
             # Добавление карточки в разметку КОНТЕЙНЕРА
             cards_container_layout.addWidget(card)
@@ -180,7 +188,7 @@ class PartnerCardsClass(QFrame):
         # Возвращение контейнера в то место, где вызывают функцию
         return cards_container
 
-    def call_switch_frames(self):
+    def open_partner_info_frame(self):
         """
         Функция для вызова метода перехода между окнами, и передачи в него имени партнера
         :return: Ничего не возвращается
@@ -191,3 +199,16 @@ class PartnerCardsClass(QFrame):
         partner_name = sender.accessibleName()
         # Вызов функции switch_frames
         self.controller.switch_frames(PartnerInfoFrame.PartnerInfoClass, partner_name)
+
+
+    def open_update_info_frame(self):
+        """
+        Функция для вызова перехода в окно Редактирования инфорации
+        :return: Ничего не возвращается
+        """
+        # Определение кнопки, с которой вызвалась функция
+        sender = self.sender()
+        # Определение Имени этой кнопки, в котором записано имя Партнера
+        partner_name = sender.accessibleName()
+        # Вызов функции switch_frames
+        self.controller.switch_frames(UpdatePartnerFrame.UpdatePartnerClass, partner_name)

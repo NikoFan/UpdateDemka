@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (
 
 import sys  # Библиотека для работы с системой
 
-from FRAMES import PartnersCardFrame, CreatePartnerFrame
+from FRAMES import PartnersCardFrame
 
 from DATABASE import Database
 

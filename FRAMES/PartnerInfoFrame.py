@@ -59,11 +59,7 @@ class PartnerInfoClass(QFrame):
         history_btn.clicked.connect(
             lambda: self.controller.switch_frames(HistoryFrame.HistoryClass)
         )  # Если действие без lambda - Скобки не ставятся
-        update_btn = QPushButton("Обновить данные")
-        # Добавление действия при нажатии на кнопку
-        update_btn.clicked.connect(
-            lambda: self.controller.switch_frames(UpdatePartnerFrame.UpdatePartnerClass)
-        )  # Если действие без lambda - Скобки не ставятся
+
         # Создание кнопки для возврата на главное окно
         back_btn = QPushButton("На главную")
         # Добавление действия при нажатии на кнопку
@@ -72,7 +68,6 @@ class PartnerInfoClass(QFrame):
         )  # Если действие без lambda - Скобки не ставятся
         # Добавление кнопки в разметку фрейма
         self.main_frame_layout.addWidget(history_btn)
-        self.main_frame_layout.addWidget(update_btn)
         self.main_frame_layout.addWidget(back_btn)
 
     def create_hint_label(self, text: str):
