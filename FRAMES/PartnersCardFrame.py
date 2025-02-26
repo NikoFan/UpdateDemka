@@ -69,6 +69,7 @@ class PartnerCardsClass(QFrame):
 
         self.main_frame_layout.addWidget(add_partner_btn)
 
+
     def add_picture(self):
         """
         Функция добавления фотографии
@@ -87,8 +88,14 @@ class PartnerCardsClass(QFrame):
         # Добавление фото в QLabel
         picture_place.setPixmap(picture_read)
 
+        # Создание горизонтальной разметки для центровки фотки
+        hbox = QHBoxLayout()
+        hbox.addWidget(QWidget())
+        hbox.addWidget(picture_place)
+        hbox.addWidget(QWidget())
+
         # Добавление фото на экран
-        self.main_frame_layout.addWidget(picture_place)
+        self.main_frame_layout.addLayout(hbox)
 
     def calculate_discount(self, partner_name: str):
         """
@@ -118,7 +125,7 @@ class PartnerCardsClass(QFrame):
         # Создание контейнера для карточек
         cards_container = QWidget()
         # Назначение разметки для контейнера, чтобы карточки были вертикально расположены
-        cards_container_layout = QVBoxLayout(cards_container)
+        self.cards_container_layout = QVBoxLayout(cards_container)
 
         # Генерация карточек
         for partner_information in self.db.take_all_partners_info():
@@ -183,7 +190,7 @@ class PartnerCardsClass(QFrame):
             card_layout.addWidget(update_btn)
 
             # Добавление карточки в разметку КОНТЕЙНЕРА
-            cards_container_layout.addWidget(card)
+            self.cards_container_layout.addWidget(card)
 
         # Возвращение контейнера в то место, где вызывают функцию
         return cards_container
