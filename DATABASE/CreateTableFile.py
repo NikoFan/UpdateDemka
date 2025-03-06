@@ -81,10 +81,14 @@ connection_uri = psycopg.connect(
     user=USER,
     host=HOST,
     password=PASS,
+
     dbname=DBNAME
 )
-create_table(connection_uri, query_partners_import)
-create_table(connection_uri, query_product_type_import)
-create_table(connection_uri, query_material_type_import)
-create_table(connection_uri, query_products_import)
-create_table(connection_uri, query_partner_products_import)
+
+print(connection_uri)
+# database
+# create_table(connection_uri, query_partners_import)
+# create_table(connection_uri, query_product_type_import)
+# create_table(connection_uri, query_material_type_import)
+# create_table(connection_uri, query_products_import)
+# create_table(connection_uri, query_partner_products_import)

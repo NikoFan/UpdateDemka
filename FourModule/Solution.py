@@ -27,13 +27,15 @@
 
 - 5 параметров
 """
-
+import psycopg
 material_id_dict = dict()
+# {"Тип материала":"% Брака"}
 product_id_dict = dict()
+# {"Тип Продукции":"Коэффициент"}
 
-from DATABASE.Database import Database
+from DATABASE.CONFIG import *
 
-def function(product_type_id, material_type_id, result_count, w:int, h:int):
+def function(product_type_id, material_type_id, result_count, w:float, h:float):
     """
     Представим что делаем квадратные доски
     :param product_type_id: Идентификатор типа продукции
@@ -61,8 +63,6 @@ def function(product_type_id, material_type_id, result_count, w:int, h:int):
             return -1
     except Exception:
         return -1
-
-
 
     print(type(break_material), type(coefficient_product))
     print(break_material, coefficient_product)
@@ -101,10 +101,8 @@ def function(product_type_id, material_type_id, result_count, w:int, h:int):
     """
 
     # все количество материала для всей продукции
-    all_materials_count =need_material_count * result_count
-    return all_materials_count
-
-
+    all_materials_count = need_material_count * result_count
+    return int(all_materials_count)
 
 def get_all_materials_id(connect):
     query = """
@@ -117,7 +115,6 @@ def get_all_materials_id(connect):
 
     materials = []
     for el in cursor.fetchall():
-
         materials.append([el[0].strip(), el[1].strip()])
 
     return materials
@@ -133,33 +130,41 @@ def get_all_products_id(connect):
 
     products = []
     for el in cursor.fetchall():
+        print("el:", el)
         products.append([el[0].strip(), str(el[1])])
+        # products = [
+        #   [Prod, Coef],
+        #   [Prod2, Coef2]
+        # ]
 
     return products
 
-
 def main():
-    connection_string = Database().connection_uri
+    connection_string = psycopg.connect(
+        user=USER,
+        host="127.0.0.1",
+        password=PASS,
+        dbname=DBNAME
+    )
+
     # Получение данных из БД
     products = get_all_products_id(connection_string)
     materials = get_all_materials_id(connection_string)
 
     # Ввод данных от пользователя
 
-    p = []  # Массив для хранения материалов без брака
     for el in products:
-        print("ID: '" + "'Коэффициент продукции: ".join(el))
-        p.append(el[0])
+        print("ID: '" + "\t'Коэффициент продукции: ".join(el))
         product_id_dict[el[0]] = float(el[1])
+        # {"TYpe" : Coef.0}
     print("Введите требуемый id продукции:")
     p_id = input("~: ")
 
 
-    m = [] # Массив для хранения материалов без брака
     for el in materials:
         print("ID: '"+"' %Брака: ".join(el))
-        m.append(el[0])
         material_id_dict[el[0]] = float(el[1][:-1])
+
     print("Введите требуемый id материала:")
     m_id = input("~: ")
 
@@ -169,16 +174,14 @@ def main():
         count = int(input("~: "))
     except Exception:
         count = -1
-        print("Проверьте ввод!")
-
 
     print("Введите требуемое Ширину и Высоту продукции")
     try:
-        w = int(input("Ширина: "))
-        h = int(input("Высота: "))
+        w = float(input("Параметр продукции 1: "))
+        h = float(input("Параметр продукции 2: "))
     except Exception:
         w, h = -1, -1
-        print("Проверьте ввод!")
+
 
     # Вызов функции
     print(function(p_id, m_id, count, w, h))

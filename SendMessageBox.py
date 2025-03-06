@@ -9,18 +9,12 @@ def send_I_message(message_text: str):
     :param message_text: Текст сообщения
     :return: UID кнопки, которую нажали
     '''
-    # Создание объекта сообщение
-    message = QMessageBox()
-    # Установка текста
-    message.setText(message_text)
-    # Установка иконки ИНФОРМАЦИЯ
-    message.setIcon(QMessageBox.Icon.Information)
-    # Установка кнопки ДА
-    message.setStandardButtons(QMessageBox.StandardButton.Yes)
-    # Вывод кнопки. UID Нажатой кнопки хранится в user_result
-    user_result = message.exec()
-    return user_result
-
+    messageBox = QMessageBox()
+    messageBox.setText(message_text)
+    messageBox.setIcon(QMessageBox.Icon.Information)
+    messageBox.setStandardButtons(QMessageBox.StandardButton.Yes)
+    result = messageBox.exec()
+    return result
 
 def send_W_message(message_text: str):
     '''
@@ -38,6 +32,7 @@ def send_W_message(message_text: str):
     message.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
     # Вывод кнопки. UID Нажатой кнопки хранится в user_result
     user_result = message.exec()
+    print(user_result, "RESULT")
     return user_result
 
 

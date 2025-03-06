@@ -51,6 +51,8 @@ def check_phone(phone_number: str):
 
 
 def check_mail(mail_address: str):
+    # nestr@mai.ru
+    # ['nestr', 'mail.ru']
     if (len(mail_address.split("@")) == 2 and
             len(mail_address.split("@")[-1].split(".")) == 2):
         return True
@@ -68,6 +70,7 @@ def check_inn(inn: str):
 def check_ur_addr(ur_addr: str):
     if (len(ur_addr.split(",")) > 2 and
             len(ur_addr.split(",")[0]) == 6 and
+            len((ur_addr.split(",")[1])) != 0 and
             ur_addr.split(",")[0].isdigit()):
         return True
     print(17)
