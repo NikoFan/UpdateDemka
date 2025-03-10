@@ -144,6 +144,7 @@ def main():
         user=USER,
         host="127.0.0.1",
         password=PASS,
+        port=5432,
         dbname=DBNAME
     )
 

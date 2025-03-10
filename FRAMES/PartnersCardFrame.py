@@ -186,8 +186,8 @@ class PartnerCardsClass(QFrame):
             card_layout.addWidget(dir_label)
             card_layout.addWidget(phone_label)
             card_layout.addWidget(rate_label)
-            card_layout.addWidget(partner_card_button)
-            card_layout.addWidget(update_btn)
+            # card_layout.addWidget(partner_card_button)
+            # card_layout.addWidget(update_btn)
 
             # Добавление карточки в разметку КОНТЕЙНЕРА
             self.cards_container_layout.addWidget(card)

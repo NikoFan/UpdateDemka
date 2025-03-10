@@ -39,6 +39,9 @@ query_partner_products_import = '''
     partner_name_fk nchar(100) not null,
     FOREIGN KEY (partner_name_fk) REFERENCES partners_import(partner_name) ON UPDATE CASCADE,
     
+    
+    primary key (product_name_fk, partner_name_fk), -- Делаем первичные ключи, чтобы сохранить 3 нормальную форму
+    
     product_count int not null,
     sale_date date not null
     )
