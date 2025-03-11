@@ -1,5 +1,5 @@
-USER="administrator"
+USER="postgres"
 HOST="localhost"
-PASS="123456"
+PASS="1234"
 PORT=5432
-DBNAME="update_demoexam"
+DBNAME="demoexamvahuui"
