@@ -14,7 +14,7 @@ from DATABASE import Database
 
 from SendMessageBox import *
 
-from FRAMES import PartnerInfoFrame
+from FRAMES import PartnersCardFrame
 
 
 
@@ -59,7 +59,7 @@ class HistoryClass(QFrame):
         back_btn = QPushButton("Назад")
         # Добавление действия при нажатии на кнопку
         back_btn.clicked.connect(
-            lambda : self.controller.switch_frames(PartnerInfoFrame.PartnerInfoClass)
+            lambda : self.controller.switch_frames(PartnersCardFrame.PartnerCardsClass)
         )  # Если действие без lambda - Скобки не ставятся
         # Добавление кнопки в разметку фрейма
         self.main_frame_layout.addWidget(back_btn)

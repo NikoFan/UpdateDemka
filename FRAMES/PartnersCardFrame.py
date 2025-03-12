@@ -16,7 +16,7 @@ from PySide6.QtGui import (
 from DATABASE import Database
 
 # Добавление файлов с другими фреймами
-from FRAMES import CreatePartnerFrame, PartnerInfoFrame, UpdatePartnerFrame
+from FRAMES import CreatePartnerFrame, HistoryFrame, UpdatePartnerFrame
 
 
 class PartnerCardsClass(QFrame):
@@ -167,13 +167,13 @@ class PartnerCardsClass(QFrame):
             rate_label.setObjectName("Card_label")
 
             # Создание кнопки для Перехода в Карточку партера
-            partner_card_button = QPushButton("Подробнее")
+            partner_card_button = QPushButton("История партнера")
             # Назначение Имени для перехода в окно конкретного партнера
             partner_card_button.setAccessibleName(f"{partner_information['name']}")
             # Установка действия при нажатии
             partner_card_button.clicked.connect(
                 # Вызов функции БЕЗ СКОБОК
-                self.open_partner_info_frame
+                self.open_partner_history_frame
             )
 
             update_btn = QPushButton("Редактировать")
@@ -186,8 +186,8 @@ class PartnerCardsClass(QFrame):
             card_layout.addWidget(dir_label)
             card_layout.addWidget(phone_label)
             card_layout.addWidget(rate_label)
-            # card_layout.addWidget(partner_card_button)
-            # card_layout.addWidget(update_btn)
+            card_layout.addWidget(partner_card_button)
+            card_layout.addWidget(update_btn)
 
             # Добавление карточки в разметку КОНТЕЙНЕРА
             self.cards_container_layout.addWidget(card)
@@ -195,7 +195,7 @@ class PartnerCardsClass(QFrame):
         # Возвращение контейнера в то место, где вызывают функцию
         return cards_container
 
-    def open_partner_info_frame(self):
+    def open_partner_history_frame(self):
         """
         Функция для вызова метода перехода между окнами, и передачи в него имени партнера
         :return: Ничего не возвращается
@@ -205,7 +205,7 @@ class PartnerCardsClass(QFrame):
         # Определение Имени этой кнопки, в котором записано имя Партнера
         partner_name = sender.accessibleName()
         # Вызов функции switch_frames
-        self.controller.switch_frames(PartnerInfoFrame.PartnerInfoClass, partner_name)
+        self.controller.switch_frames(HistoryFrame.HistoryClass, partner_name)
 
 
     def open_update_info_frame(self):

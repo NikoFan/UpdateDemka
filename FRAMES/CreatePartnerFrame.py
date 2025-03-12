@@ -75,7 +75,7 @@ class CreatePartnerClass(QFrame):
         self.main_frame_layout.addWidget(add_btn)
 
         # Создание кнопки для возврата на главное окно
-        back_btn = QPushButton("На главную")
+        back_btn = QPushButton("Назад")
         # Добавление действия при нажатии на кнопку
         back_btn.clicked.connect(
             lambda : self.controller.switch_frames(PartnersCardFrame.PartnerCardsClass)
