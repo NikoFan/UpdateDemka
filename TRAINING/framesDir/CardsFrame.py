@@ -2,7 +2,8 @@ from PySide6.QtWidgets import (QFrame,
                                QWidget, QScrollArea, QPushButton, QVBoxLayout, QLabel, QHBoxLayout)
 from PySide6.QtGui import QPixmap
 
-from TRAINING.framesDir import UpdatePartnerInfo, CreatePartner, HistoryFrame
+# from TRAINING.framesDir import UpdatePartnerInfo, CreatePartner, HistoryFrame
+from TRAINING.framesDir import CreateAndUpdatePartnerFrame, HistoryFrame
 
 
 class PartnersCardsFrameClass(QFrame):
@@ -32,13 +33,13 @@ class PartnersCardsFrameClass(QFrame):
         scroll_area.setWidget(self.create_cards())
         self.main_layout.addWidget(scroll_area)
 
-        create_partner_btn = QPushButton("Добавить партнера")
-        create_partner_btn.clicked.connect(
-            lambda : self.controller.switch_frames(CreatePartner.CreatePartnerClass)
-        )
-
-
-        self.main_layout.addWidget(create_partner_btn)
+        # create_partner_btn = QPushButton("Добавить партнера")
+        # create_partner_btn.clicked.connect(
+        #     lambda : self.controller.switch_frames(CreatePartner.CreatePartnerClass)
+        # )
+        #
+        #
+        # self.main_layout.addWidget(create_partner_btn)
 
 
     def create_icon(self):
@@ -135,7 +136,7 @@ class PartnersCardsFrameClass(QFrame):
         print("SENDER:", sender)
         sender_name = sender.objectName()
         print("SENDER NAME:", sender_name)
-        self.controller.switch_frames(UpdatePartnerInfo.UpdatePartnerCardClass, sender_name)
+        self.controller.switch_frames(CreateAndUpdatePartnerFrame.CreateUpdatePartnerClass, sender_name)
 
     def open_history_frame(self):
         """

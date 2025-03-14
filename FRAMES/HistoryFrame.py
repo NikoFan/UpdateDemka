@@ -46,7 +46,7 @@ class HistoryClass(QFrame):
         self.main_frame_layout.addWidget(table)
 
         # Цикл заполнения таблицы данными из БД
-        for data in self.db.take_sales_info(PartnerStatic.Partner.get_name()):
+        for data in self.db.take_partner_history_info(PartnerStatic.Partner.get_name()):
             # Создание элемента талицы и присвоение его к таблице (через скобки прибили его на ГВОЗДЬ)
             item = QTreeWidgetItem(table)
             item.setText(0, data['product'])

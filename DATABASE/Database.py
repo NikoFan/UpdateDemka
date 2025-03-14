@@ -223,11 +223,11 @@ class Database():
             return False
 
 
-    def take_sales_info(self, partner_name: str):
+    def take_partner_history_info(self, partner_name: str):
         """
         Функция получения всей информации о Конкретном партнере, для выгрузки в таблицу
         :param partner_name Имя партнера
-        :return:
+        :return: Список со словарем
         """
         try:
             query = f'''

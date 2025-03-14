@@ -33,7 +33,7 @@ class UpdatePartnerClass(QFrame):
 
     def setup_ui(self):
         # Создание текстового поля
-        title_label = QLabel("Добавление партнера")
+        title_label = QLabel("Редактировать партнера")
         # Назначение объектного имени для стилизации объекта
         title_label.setObjectName("Title")
         # ДОБАВЛЕНИЕ текстового поля на фрейм
