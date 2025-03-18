@@ -101,6 +101,19 @@ font-size: 15px;
 }
 
 
+#CardInfoButtonsTitle {
+background: none;
+color: black;
+border: none;
+font-size: 20px;
+}
+
+#CardInfoButtons {
+background: none;
+color: black;
+border: none;
+}
+
 #Title {
 font-size: 20px;
 qproperty-alignment: AlignCenter;
@@ -109,6 +122,11 @@ qproperty-alignment: AlignCenter;
 #Hint_label {
 font-size: 18px;
 padding: 10px, 0px, 0px, 0px;
+font-weight: bold;
+}
+
+#EditLine {
+font-size: 18px;
 font-weight: bold;
 }
 

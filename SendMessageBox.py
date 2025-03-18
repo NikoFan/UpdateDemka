@@ -9,12 +9,13 @@ def send_I_message(message_text: str):
     :param message_text: Текст сообщения
     :return: UID кнопки, которую нажали
     '''
-    messageBox = QMessageBox()
-    messageBox.setText(message_text)
-    messageBox.setIcon(QMessageBox.Icon.Information)
-    messageBox.setStandardButtons(QMessageBox.StandardButton.Yes)
-    result = messageBox.exec()
+    message_box = QMessageBox()
+    message_box.setText(message_text)
+    message_box.setStandardButtons(QMessageBox.StandardButton.Yes)
+    message_box.setIcon(QMessageBox.Icon.Information)
+    result = message_box.exec()
     return result
+
 
 def send_W_message(message_text: str):
     '''

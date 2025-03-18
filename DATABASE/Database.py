@@ -148,37 +148,40 @@ class Database():
         :return:
         """
         try:
-            query = f'''
-            SELECT *
-            FROM partners_import
-            WHERE partner_name = '{partner_name}';
-            '''
-            # Создание курсора для взаимодействия с БД
+            query = f"""
+select *
+from partners_import
+where partner_name = '{partner_name}'
+"""
             cursor = self.connection_uri.cursor()
-            # Исполнение запроса
             cursor.execute(query)
-            # Создание словаря для хранения результатов
-            partners_data = dict()
-            for data in cursor.fetchall():
-                # Заполнение словаря, который будет возвращен
-                partners_data = {  # При добавлении используются словари {}
-                    'type': data[0].strip(),  # .strip() - Обрезание лишних пробелов. Только для nchar()
-                    'name': data[1].strip(),
-                    'dir': data[2].strip(),
-                    'mail': data[3].strip(),
-                    'phone': data[4].strip(),
-                    'addr': data[5].strip(),
-                    'inn': data[6].strip(),
-                    'rate': data[7].strip()
-                }
-            # Закрытие курсора
-            cursor.close()
-            # Возврат данных
-            return partners_data
+
+            partner_data = []
+
+            # Прочитывание ответа из запроса
+            for row in cursor.fetchall():
+                partner_data.append(
+                    {
+                        'type': row[0].strip(),
+                        'name': row[1].strip(),
+                        'dir': row[2].strip(),
+                        'mail': row[3].strip(),
+                        'phone': row[4].strip(),
+                        'addr': row[5].strip(),
+                        'inn': row[6].strip(),
+                        'rate': row[7].strip()
+                    }
+                )
+
+            # [{...}]
+
+            # result = [{....}]
+            # result[0]['name']
+
+            return partner_data[0]
         except Exception as error:
-            print(f':: {error}')
-            # При ошибке возвращается пустой словарь
-            return dict()
+            print(error)
+            return []
 
     def update_partner(self, partner_data: dict, partner_name: str):
         """
@@ -221,7 +224,6 @@ class Database():
             print(f'::^ {error}')
             # При ошибке возвращается пустоту
             return False
-
 
     def take_partner_history_info(self, partner_name: str):
         """

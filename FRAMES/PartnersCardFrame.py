@@ -16,7 +16,7 @@ from PySide6.QtGui import (
 from DATABASE import Database
 
 # Добавление файлов с другими фреймами
-from FRAMES import CreatePartnerFrame, HistoryFrame, UpdatePartnerFrame
+from FRAMES import  HistoryFrame, UpdatePartnerFrame, CreatePartnerFrame
 
 
 class PartnerCardsClass(QFrame):
@@ -140,31 +140,75 @@ class PartnerCardsClass(QFrame):
 
             # Создание горизонтальной разметки для строки 'Тип | Наименование партнера          10%'
             card_top_level_hbox = QHBoxLayout()
-            # Создание текстового поля с Типом и Именем партнера
-            partner_type_label = QLabel(f'{partner_information["type"]} | {partner_information["name"]}')
-            partner_type_label.setStyleSheet('QLabel {font-size: 18px}')  # Назначения стиля для поля
 
-            partner_discount_label = QLabel(f'{self.calculate_discount(partner_information["name"])}%')
-            # Назначение стиля для поля
-            partner_discount_label.setStyleSheet('QLabel {qproperty-alignment: AlignRight; font-size: 18px}')
+            # Создание кнопки с типом партнера
+            partner_type_btn = QPushButton(f"{partner_information['type']}")
+            partner_type_btn.setObjectName("CardInfoButtonsTitle")
+            partner_type_btn.clicked.connect(
+                self.open_update_partner_frame
+            )
+            # Установка имени, по которому будет определяться партнер для редактирования
+            partner_type_btn.setAccessibleName(partner_information['name'])
 
-            # Добавление полей в горизонтальную разметку
-            card_top_level_hbox.addWidget(partner_type_label)
-            card_top_level_hbox.addWidget(partner_discount_label)
+            # Разделительный знак
+            partner_edge = QLabel(f"|")
+            partner_edge.setObjectName("CardInfoButtonsTitle")
 
-            # Добавление горизонтальной разметки в карточку
-            card_layout.addLayout(card_top_level_hbox)
+            # Кнопка с Наименованием партнера
+            partner_name_btn = QPushButton(f"{partner_information['name']}")
+            partner_name_btn.clicked.connect(
+                self.open_update_partner_frame
+            )
+            partner_name_btn.setObjectName("CardInfoButtonsTitle")
+            partner_name_btn.setAccessibleName(partner_information['name'])
 
-            # Создание текстовых полей
-            dir_label = QLabel(f"{partner_information['dir']}")
-            # Назначение объектного имени для Дизайна
-            dir_label.setObjectName("Card_label")
+            # Установка скидки (Кнопкой, чтобы была в один ряд с остальными)
+            partner_discount = QPushButton(f"{self.calculate_discount(partner_information['name'])}%")
+            partner_discount.setObjectName("CardInfoButtonsTitle")
 
-            phone_label = QLabel(f"+7 {partner_information['phone']}")
-            phone_label.setObjectName("Card_label")
+            # Добавление элементов внутрь верхней планки
+            card_top_level_hbox.addWidget(partner_type_btn)
+            card_top_level_hbox.addWidget(partner_edge)
+            card_top_level_hbox.addWidget(partner_name_btn)
+            card_top_level_hbox.addStretch() # Добавляет разделение между объектами лейаута
+            card_top_level_hbox.addWidget(partner_discount)
 
-            rate_label = QLabel(f"Рейтинг: {partner_information['rate']}")
-            rate_label.setObjectName("Card_label")
+            partner_dir_btn = QPushButton(f"{partner_information['dir']}")
+            partner_dir_btn.clicked.connect(
+                self.open_update_partner_frame
+            )
+            # Создание горизонтальной разметки, чтобы сместить кнопку с директором в левый край
+            dir_hbox = QHBoxLayout()
+            dir_hbox.addWidget(partner_dir_btn)
+            dir_hbox.addStretch()
+
+            # Установка обджект имени со стилем
+            partner_dir_btn.setObjectName("CardInfoButtons")
+            partner_dir_btn.setAccessibleName(partner_information['name'])
+
+            partner_phone_btn = QPushButton(f"+7 {partner_information['phone']}")
+            partner_phone_btn.clicked.connect(
+                self.open_update_partner_frame
+            )
+            # Аналогичное действие как и с кнопкой директора
+            phone_hbox = QHBoxLayout()
+            phone_hbox.addWidget(partner_phone_btn)
+            phone_hbox.addStretch()
+
+            partner_phone_btn.setObjectName("CardInfoButtons")
+            partner_phone_btn.setAccessibleName(partner_information['name'])
+
+            partner_rate_btn = QPushButton(f"Рейтинг: {partner_information['rate']}")
+            partner_rate_btn.clicked.connect(
+                self.open_update_partner_frame
+            )
+            # Аналогично с кнопкой директора
+            rate_hbox = QHBoxLayout()
+            rate_hbox.addWidget(partner_rate_btn)
+            rate_hbox.addStretch()
+
+            partner_rate_btn.setObjectName("CardInfoButtons")
+            partner_rate_btn.setAccessibleName(partner_information['name'])
 
             # Создание кнопки для Перехода в Карточку партера
             partner_card_button = QPushButton("История партнера")
@@ -176,18 +220,11 @@ class PartnerCardsClass(QFrame):
                 self.open_partner_history_frame
             )
 
-            update_btn = QPushButton("Редактировать")
-            update_btn.setAccessibleName(f"{partner_information['name']}")
-            # Добавление действия при нажатии на кнопку
-            update_btn.clicked.connect(
-                self.open_update_info_frame
-            )  # Если действие без lambda - Скобки не ставятся
-            # Добавление текстовых полей в разметку КАРТОЧКИ
-            card_layout.addWidget(dir_label)
-            card_layout.addWidget(phone_label)
-            card_layout.addWidget(rate_label)
+            card_layout.addLayout(card_top_level_hbox)
+            card_layout.addLayout(dir_hbox)
+            card_layout.addLayout(phone_hbox)
+            card_layout.addLayout(rate_hbox)
             card_layout.addWidget(partner_card_button)
-            card_layout.addWidget(update_btn)
 
             # Добавление карточки в разметку КОНТЕЙНЕРА
             self.cards_container_layout.addWidget(card)
@@ -208,14 +245,13 @@ class PartnerCardsClass(QFrame):
         self.controller.switch_frames(HistoryFrame.HistoryClass, partner_name)
 
 
-    def open_update_info_frame(self):
+    def open_update_partner_frame(self):
         """
-        Функция для вызова перехода в окно Редактирования инфорации
-        :return: Ничего не возвращается
+        Обработчик нажатий на кнопки
+        :return:
         """
-        # Определение кнопки, с которой вызвалась функция
         sender = self.sender()
-        # Определение Имени этой кнопки, в котором записано имя Партнера
-        partner_name = sender.accessibleName()
-        # Вызов функции switch_frames
-        self.controller.switch_frames(UpdatePartnerFrame.UpdatePartnerClass, partner_name)
+        sender_name = sender.accessibleName()
+        print("SENDER ACCS NAMe:", sender_name)
+        self.controller.switch_frames(UpdatePartnerFrame.UpdatePartnerClass, sender_name)
+

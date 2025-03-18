@@ -16,62 +16,66 @@ def start_check(partners_input_data: dict):
         return True
     return False
 
-
-def check_org_name(partner_name: str):
-    if len(partner_name) != 0:
-        return True
-    print(1)
-    return False
-
-
-def check_dir_name(dir_name: str):
-    if len(dir_name.split(" ")) == 3:
-        return True
-    print(12)
-    return False
-
-
-def check_rate(rate: int):
+def check_inn(inn):
     try:
-        if rate in range(1, 11):
+        if (
+                int(inn) > 0 and
+            len(str(inn)) == 10
+        ):
             return True
-        print(13)
+        print("inn")
         return False
     except Exception:
-        print(133)
         return False
 
-
-def check_phone(phone_number: str):
-    if (len(phone_number) == 13 and
-            phone_number[0] in ['9', '8', '4']):
+def check_mail(mail):
+    # nr@mail.ru
+    # -> ["n", "mail.ru"]
+    # -> ["n", "mail.ru"] -> ["mail", "ru"]
+    # -> ["nr@mail", "ru"]
+    if (
+        len(mail.split("@")) == 2 and
+        len(mail.split("@")[1].split(".")) == 2
+    ):
         return True
-    print(15)
+    print("mail")
     return False
 
+def check_rate(rate):
+    try:
+        if int(rate) in range(1, 11):
+            return True
+        print("rate")
+        return False
+    except Exception:
+        return False
 
-def check_mail(mail_address: str):
-    # nestr@mai.ru
-    # ['nestr', 'mail.ru']
-    if (len(mail_address.split("@")) == 2 and
-            len(mail_address.split("@")[-1].split(".")) == 2):
+def check_phone(phone):
+    # 999 999 99 99
+    if (
+        len(phone.split(" ")) == 4 and
+        phone[0] in ["9", "8", "4"]
+    ):
         return True
-    print(14)
+    print("phone")
     return False
 
-
-def check_inn(inn: str):
-    if inn.isdigit() and len(inn) == 10:
+def check_org_name(name):
+    if len(name) != 0:
         return True
-    print(16)
     return False
 
-
-def check_ur_addr(ur_addr: str):
-    if (len(ur_addr.split(",")) > 2 and
-            len(ur_addr.split(",")[0]) == 6 and
-            len((ur_addr.split(",")[1])) != 0 and
-            ur_addr.split(",")[0].isdigit()):
+def check_dir_name(name):
+    if len(name.split(" ")) == 3:
         return True
-    print(17)
+    return False
+
+def check_ur_addr(addr):
+    # 123123, Moscrdf -> ["123123", "MOcrdf"]
+    if (
+        len(addr.split(", ")) >= 2 and
+        addr.split(", ")[0].isdigit()
+    ):
+        return True
+    print("addr")
     return False
