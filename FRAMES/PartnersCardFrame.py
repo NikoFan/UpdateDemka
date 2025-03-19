@@ -210,21 +210,19 @@ class PartnerCardsClass(QFrame):
             partner_rate_btn.setObjectName("CardInfoButtons")
             partner_rate_btn.setAccessibleName(partner_information['name'])
 
-            # Создание кнопки для Перехода в Карточку партера
-            partner_card_button = QPushButton("История партнера")
-            # Назначение Имени для перехода в окно конкретного партнера
-            partner_card_button.setAccessibleName(f"{partner_information['name']}")
-            # Установка действия при нажатии
-            partner_card_button.clicked.connect(
-                # Вызов функции БЕЗ СКОБОК
+            # Кнопка истории партнера
+            partner_history_btn = QPushButton("История партнера")
+            partner_history_btn.setAccessibleName(partner_information["name"])
+            partner_history_btn.clicked.connect(
                 self.open_partner_history_frame
             )
+
 
             card_layout.addLayout(card_top_level_hbox)
             card_layout.addLayout(dir_hbox)
             card_layout.addLayout(phone_hbox)
             card_layout.addLayout(rate_hbox)
-            card_layout.addWidget(partner_card_button)
+            card_layout.addWidget(partner_history_btn)
 
             # Добавление карточки в разметку КОНТЕЙНЕРА
             self.cards_container_layout.addWidget(card)
@@ -242,7 +240,7 @@ class PartnerCardsClass(QFrame):
         # Определение Имени этой кнопки, в котором записано имя Партнера
         partner_name = sender.accessibleName()
         # Вызов функции switch_frames
-        self.controller.switch_frames(HistoryFrame.HistoryClass, partner_name)
+        self.controller.switch_frames(HistoryFrame.PartnerHistoryClass, partner_name)
 
 
     def open_update_partner_frame(self):

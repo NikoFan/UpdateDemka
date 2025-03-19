@@ -232,32 +232,25 @@ where partner_name = '{partner_name}'
         :return: Список со словарем
         """
         try:
-            query = f'''
-                    SELECT *
-                    FROM partner_products_import
-                    WHERE partner_name_fk = '{partner_name}';
-                    '''
-            # Создание курсора для взаимодействия с БД
+            query = f"""
+select *
+from partner_products_import
+where partner_name_fk = '{partner_name}'
+"""
             cursor = self.connection_uri.cursor()
-            # Исполнение запроса
             cursor.execute(query)
-            # Создание массива для хранения результатов
-            partners_data = []
-            for data in cursor.fetchall():
-                # Заполнение массива, который будет возвращен
-                partners_data.append(
-                    {  # При добавлении используются словари {}
-                        'product': data[0].strip(),  # .strip() - Обрезание лишних пробелов. Только для nchar()
-                        'partner': data[1].strip(),
-                        'count': data[2],  # Эти параметры int и date - не применяют strip()
-                        'date': data[3],
+            history = []
+            for row in cursor.fetchall():
+                history.append(
+                    {
+                        'product':row[0].strip(),
+                        'partner':row[1].strip(),
+                        'count':row[2],
+                        'data':row[3]
                     }
                 )
 
-            # Закрытие курсора
-            cursor.close()
-            # Возврат данных
-            return partners_data
+            return history
         except Exception as error:
             print(f':: {error}')
             # При ошибке возвращается пустой массива

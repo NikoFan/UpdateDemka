@@ -96,6 +96,12 @@ background: #67BA80;
 color: #000000;
 }
 
+QTreeWidget {
+font-style: italic;
+background: #F4E8D3;
+}
+
+
 QLineEdit {
 font-size: 15px;
 }
@@ -140,6 +146,7 @@ font-size: 15px;
 
 #Card {
 border: 2px solid black;
+background: #F4E8D3;
 }
 
 #Top_lvl_label {

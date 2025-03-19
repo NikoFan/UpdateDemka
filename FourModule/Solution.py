@@ -1,192 +1,128 @@
-"""
-'...С целью обеспечить одинаковый расчет количества материала,
-требуемого для производства продукции, необходимо разработать метод...'
-
-* Следуя из задания - от нас не требуется разработать окно / фрейм. Просто функция, которая должна выполнять действие
-"""
-
-"""
-'...Метод должен принимать идентификатор типа продукции,
-идентификатор типа материала, количество получаемой продукции – целые
-числа, параметры продукции (два параметра) – вещественные, положительные
-числа, а возвращать целое число – количество необходимого материала с
-учетом возможного брака материала....'
-
-*Как следует из ответа от Организаторов:
-'
-Добрый день! 
-
-Параметры продукции (два параметра) - длина и ширина или ширина и высота, например, или любые два вещественных
-положительных числа. Всего пять аргументов функции (метода) расчета количества материала: идентификатор типа продукции,
-идентификатор типа материала, количество получаемой продукции, параметр продукции1, параметр продукции2.
-'
-=> Параметры продукции - W H
-Идентификатор типа продукции - Product_type_id
-Идентификатор типа материала - Material_type_id
-Количество получаемой продукции - Result_count_of_products
-
-- 5 параметров
-"""
 import psycopg
-material_id_dict = dict()
-# {"Тип материала":"% Брака"}
-product_id_dict = dict()
-# {"Тип Продукции":"Коэффициент"}
 
-from DATABASE.CONFIG import *
 
-def function(product_type_id, material_type_id, result_count, w:float, h:float):
+product_dict = dict()
+material_dict = dict()
+
+def calc_method(product_id, material_id, result_count: int, param_1: float, param_2: float) -> int:
     """
-    Представим что делаем квадратные доски
-    :param product_type_id: Идентификатор типа продукции
-    :param material_type_id: Идентификатор типа материала
-    :param result_count: Количество получаемой продукции
-    :param w: Ширина
-    :param h: высота
-    :return: целое число – количество необходимого материала с
-учетом возможного брака материала
+    Метод расчета количества материала для производства продукции
+    :param product_id: Идентификатор продукции
+    :param material_id: идентификатор материала
+    :param result_count: Количество продукции
+    :param param_1: Параметр 1
+    :param param_2: Параметр 2
+    :return: INT количество материала
     """
 
+    # Проверить данные на соответствие
     try:
-        # если идет установка, что должен учитываться Брак - Данные про материал и Продукцию берутся из БД
-        # НО - тип материала не привязан к типу продукции -> Мы их связываем тут
+        product_coef = product_dict[product_id]
+        material_percent = material_dict[material_id]
 
-        # Использование глобального словаря
-
-        break_material = material_id_dict[material_type_id]
-        coefficient_product = product_id_dict[product_type_id]
-        if result_count <= 0:
+        if result_count < 1:
             return -1
-        elif w <= 0:
+        elif param_1 < 1:
             return -1
-        elif h <= 0:
+        elif param_2 < 1:
             return -1
-    except Exception:
+    except Exception as err:
+        print(err)
         return -1
 
-    print(type(break_material), type(coefficient_product))
-    print(break_material, coefficient_product)
+
+    action_1 = param_1 * param_2
+    action_2 = action_1 * product_coef
+    # action_2 = 100
+    # % = 0.1
+
+    broke_minus = action_2 * material_percent
+    action_3 = action_2 + broke_minus
+
+    final_count = action_3 * result_count
+
+    print(final_count)
+    return int(final_count)
 
 
+def take_products(connection):
     """
-    Количество необходимого материала на одну единицу продукции рассчитывается как
-    произведение параметров продукции,
-    умноженное на коэффициент типа продукции. 
-    Кроме того, нужно учитывать процент брака материала в зависимости от его типа: с учетом возможного
-    брака материала необходимое количество материала должно быть увеличено.
-    Коэффициент типа продукции и процент брака – вещественные числа.
+    Метод получения продукции
+    :return: Список со словарями
     """
+    try:
+        query = """
+        select *
+        from product_type_import"""
 
-    # Произведение параметров продукции
-    params_mult = w * h
+        cursor = connection.cursor()
+        cursor.execute(query)
 
-    # Количество необходимого материала
-    need_material_count = params_mult * coefficient_product
+        for row in cursor.fetchall():
+            product_dict[row[0].strip()] = row[1]
 
-    # Расчет % брака и его приколов
+        return product_dict
+    except Exception as error:
+        print(error)
+        return dict()
+
+
+def take_materials(connection):
     """
-    На примере Материала 1 - брак = 0.1%
-    => из 100 продукции - 10 брак
-    => На 100 продукции нужно (условно) 1000 материала
-    => 100 материала уйдут на брак. Надо этот материал прибавить к уже готовому, чтобы выйти в 0 (Выполнить план и + брак)
+    Метод получения продукции
+    :return: Список со словарями
     """
-    # Получение бракованного материала для восполнения
-    break_count = need_material_count * break_material
+    try:
+        query = """
+        select *
+        from material_type_import"""
 
-    # Увеличение материала, чтобы убрать брак
-    need_material_count += break_count
+        cursor = connection.cursor()
+        cursor.execute(query)
 
-    """
-    => need_material_count -> Количество материала для Единицы продукции
-    """
+        for row in cursor.fetchall():
+            material_dict[row[0].strip()] = float(row[1].strip()[:-1]) #0.1%
 
-    # все количество материала для всей продукции
-    all_materials_count = need_material_count * result_count
-    return int(all_materials_count)
-
-def get_all_materials_id(connect):
-    query = """
-    select *
-    from material_type_import
-    """
-
-    cursor = connect.cursor()
-    cursor.execute(query)
-
-    materials = []
-    for el in cursor.fetchall():
-        materials.append([el[0].strip(), el[1].strip()])
-
-    return materials
-
-def get_all_products_id(connect):
-    query = """
-    select *
-    from product_type_import
-    """
-
-    cursor = connect.cursor()
-    cursor.execute(query)
-
-    products = []
-    for el in cursor.fetchall():
-        print("el:", el)
-        products.append([el[0].strip(), str(el[1])])
-        # products = [
-        #   [Prod, Coef],
-        #   [Prod2, Coef2]
-        # ]
-
-    return products
+        return material_dict
+    except Exception as error:
+        print(error)
+        return dict()
 
 def main():
-    connection_string = psycopg.connect(
-        user=USER,
+    connection = psycopg.connect(
+        user="administrator",
         host="127.0.0.1",
-        password=PASS,
-        port=5432,
-        dbname=DBNAME
+        dbname="update_demoexam",
+        password="123456"
     )
 
-    # Получение данных из БД
-    products = get_all_products_id(connection_string)
-    materials = get_all_materials_id(connection_string)
-
-    # Ввод данных от пользователя
-
-    for el in products:
-        print("ID: '" + "\t'Коэффициент продукции: ".join(el))
-        product_id_dict[el[0]] = float(el[1])
-        # {"TYpe" : Coef.0}
-    print("Введите требуемый id продукции:")
-    p_id = input("~: ")
+    # Получение идентификатора продукции
+    # { ID:COEFFICIENT ,  ID2:COEFFICIENT2 }
+    print(take_products(connection).items())
+    for id, coefficient in take_products(connection).items():
+        print(f"ID: {id}\tКоэффициент:\t {coefficient}")
+    product_id_input = input("Идентификатор продукции: ")
 
 
-    for el in materials:
-        print("ID: '"+"' %Брака: ".join(el))
-        material_id_dict[el[0]] = float(el[1][:-1])
+    # Получение материалов
+    for id, broke in take_materials(connection).items():
+        print(f"ID: {id}\tБрак:\t {broke}")
+    material_id_input = input("Идентификатор материала: ")
 
-    print("Введите требуемый id материала:")
-    m_id = input("~: ")
-
-
-    print("Введите требуемое количество продукции")
     try:
-        count = int(input("~: "))
+        res_count = int(input("Введите количество получаемой продукции: "))
     except Exception:
-        count = -1
+        res_count = -1
 
-    print("Введите требуемое Ширину и Высоту продукции")
     try:
-        w = float(input("Параметр продукции 1: "))
-        h = float(input("Параметр продукции 2: "))
+        param_1 = float(input("Введите параметр 1: "))
     except Exception:
-        w, h = -1, -1
+        param_1 = -1
 
+    try:
+        param_2 = float(input("Введите параметр 2: "))
+    except Exception:
+        param_2 = -1
 
-    # Вызов функции
-    print(function(p_id, m_id, count, w, h))
-
-
-
+    print(calc_method(product_id_input, material_id_input, res_count, param_1, param_2))
 main()
