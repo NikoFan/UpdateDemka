@@ -16,7 +16,7 @@ from PySide6.QtGui import (
 from DATABASE import Database
 
 # Добавление файлов с другими фреймами
-from FRAMES import  HistoryFrame, UpdatePartnerFrame, CreatePartnerFrame
+from FRAMES import HistoryFrame, UpdatePartnerFrame, CreatePartnerFrame
 
 
 class PartnerCardsClass(QFrame):
@@ -68,7 +68,6 @@ class PartnerCardsClass(QFrame):
         )
 
         self.main_frame_layout.addWidget(add_partner_btn)
-
 
     def add_picture(self):
         """
@@ -170,7 +169,7 @@ class PartnerCardsClass(QFrame):
             card_top_level_hbox.addWidget(partner_type_btn)
             card_top_level_hbox.addWidget(partner_edge)
             card_top_level_hbox.addWidget(partner_name_btn)
-            card_top_level_hbox.addStretch() # Добавляет разделение между объектами лейаута
+            card_top_level_hbox.addStretch()  # Добавляет разделение между объектами лейаута
             card_top_level_hbox.addWidget(partner_discount)
 
             partner_dir_btn = QPushButton(f"{partner_information['dir']}")
@@ -217,7 +216,6 @@ class PartnerCardsClass(QFrame):
                 self.open_partner_history_frame
             )
 
-
             card_layout.addLayout(card_top_level_hbox)
             card_layout.addLayout(dir_hbox)
             card_layout.addLayout(phone_hbox)
@@ -242,7 +240,6 @@ class PartnerCardsClass(QFrame):
         # Вызов функции switch_frames
         self.controller.switch_frames(HistoryFrame.PartnerHistoryClass, partner_name)
 
-
     def open_update_partner_frame(self):
         """
         Обработчик нажатий на кнопки
@@ -252,4 +249,3 @@ class PartnerCardsClass(QFrame):
         sender_name = sender.accessibleName()
         print("SENDER ACCS NAMe:", sender_name)
         self.controller.switch_frames(UpdatePartnerFrame.UpdatePartnerClass, sender_name)
-

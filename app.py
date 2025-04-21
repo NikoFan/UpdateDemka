@@ -37,7 +37,8 @@ class MainApplicationClass(QWidget):
         self.frames_container = QStackedWidget()
 
         # Вызов класса первого фрейма
-        partner_cards_frame = PartnersCardFrame.PartnerCardsClass(self) # self - параметр аргумента main_class_controller
+        partner_cards_frame = PartnersCardFrame.PartnerCardsClass(
+            self)  # self - параметр аргумента main_class_controller
         # Добавление класса фрейма в контейнер фреймов
         self.frames_container.addWidget(partner_cards_frame)
 
@@ -61,8 +62,6 @@ class MainApplicationClass(QWidget):
 
         # Вызов класса целевого фрейма
         goal_frame = need_frame_name(self)
-
-
 
         # Удаление старых дубликатов целевого фрейма из контейнера
         self.frames_container.removeWidget(goal_frame)
@@ -114,7 +113,20 @@ border: none;
 font-size: 20px;
 }
 
+#CardInfoButtonsTitle:hover {
+background: none;
+color: black;
+border: none;
+font-size: 20px;
+}
+
 #CardInfoButtons {
+background: none;
+color: black;
+border: none;
+}
+
+#CardInfoButtons:hover {
 background: none;
 color: black;
 border: none;
